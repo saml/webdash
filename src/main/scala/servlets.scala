@@ -1,10 +1,13 @@
 package servlets
 
+import javax.servlet.annotation.WebServlet
+
 import scala.xml.PrettyPrinter
 import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
+@WebServlet(name="Yo", urlPatterns=Array("/yo/*"))
 class MyServlet extends HttpServlet {
 
   override def doGet(request: HttpServletRequest, response: HttpServletResponse) {
@@ -15,7 +18,7 @@ class MyServlet extends HttpServlet {
     val responseBody =
       <html>
         <body>
-          <h1>Hello, world!</h1>
+          <h1>Hello, world! {request.getPathInfo}</h1>
         </body>
       </html>
 
