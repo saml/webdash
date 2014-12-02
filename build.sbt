@@ -8,6 +8,9 @@ scalaVersion := "2.11.4"
 
 jetty()
 
-libraryDependencies ++= Seq("javax.servlet" % "javax.servlet-api" % "3.0.1" % "provided")
+libraryDependencies ++= Seq(
+  "javax.servlet" % "javax.servlet-api" % "3.1.0" % "provided",
+  "org.scala-lang.modules" %% "scala-xml" % "1.0.2"
+)
 
 

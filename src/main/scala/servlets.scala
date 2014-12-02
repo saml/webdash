@@ -1,6 +1,5 @@
 package servlets
 
-import scala.xml.NodeSeq
 import scala.xml.PrettyPrinter
 import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
@@ -13,7 +12,7 @@ class MyServlet extends HttpServlet {
     response.setContentType("text/html")
     response.setCharacterEncoding("UTF-8")
 
-    val responseBody: NodeSeq =
+    val responseBody =
       <html>
         <body>
           <h1>Hello, world!</h1>
@@ -22,7 +21,10 @@ class MyServlet extends HttpServlet {
 
     val printer = new PrettyPrinter(80, 2)
 
-    response.getWriter.write(printer.formatNodes(responseBody))
+    val writer = response.getWriter
+    val content = printer.formatNodes(responseBody)
+    writer.write("<!doctype html>\n")
+    writer.write(content)
 
   }
 
