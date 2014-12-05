@@ -4,11 +4,15 @@ import multiprocessing
 import logging
 import logging.handlers
 import os
+import json
 
 import pymongo
 import requests
+from bson.objectid import ObjectId
+from bson import json_util
 
 from . import config
+
 
 class Worker(object):
     def __init__(self, db):
@@ -90,4 +94,20 @@ def configure_logging(logger):
     logger.addHandler(handler)
     logger.addHandler(stream_handler)
 
+def to_jsonable(obj):
+    if isinstance(obj, datetime.datetime):
+        return obj.isoformat()
+    if isinstance(obj, ObjectId):
+        return json_util.default(obj)
+    props = dir(obj)
+    if 'to_dict' in props:
+        return obj.as_dict()
+    if '__iter__' in props:
+        return list(obj)
+    raise TypeError('Cannot serialize {} of type {}'.format(obj, type(obj)))
 
+def jsondumps(obj):
+    return json.dumps(obj, default=to_jsonable, indent=2)
+
+def jsonloads(s):
+    return json.loads(s)
