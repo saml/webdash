@@ -1,4 +1,7 @@
 mongouri='mongodb://localhost/webdash'
+log_level='INFO'
+log_path='./logs/webdash.log'
+
 urls = []
 
 try:

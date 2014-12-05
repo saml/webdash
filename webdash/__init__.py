@@ -1,6 +1,9 @@
 import time
 import datetime
 import multiprocessing
+import logging
+import logging.handlers
+import os
 
 import pymongo
 import requests
@@ -64,4 +67,27 @@ def download(url):
 
 def get_db(mongouri=config.mongouri):
     return pymongo.MongoClient(mongouri)
+
+def configure_logging(logger):
+    log_level = getattr(logging, config.log_level.upper())
+    logger.setLevel(log_level)
+    formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s (%(pathname)s:%(lineno)d)')
+
+    log_path = config.log_path
+    log_dir = os.path.dirname(log_path)
+
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
+
+    handler = logging.handlers.TimedRotatingFileHandler(log_path, when='midnight', interval=1, backupCount=365)
+    handler.setLevel(log_level)
+    handler.setFormatter(formatter)
+
+    stream_handler = logging.StreamHandler()
+    stream_handler.setLevel(log_level)
+    stream_handler.setFormatter(formatter)
+
+    logger.addHandler(handler)
+    logger.addHandler(stream_handler)
+
 
