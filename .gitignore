@@ -2,3 +2,6 @@ target/
 *.class
 .idea/
 .idea_modules/
+
+*_local.py
+*.pyc
